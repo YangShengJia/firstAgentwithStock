@@ -1,3 +1,5 @@
+<!-- Project overview and usage guide for the TSMC stock movement predictor. -->
+
 # firstAgentwithStock
 
 使用 Python、yfinance 與 Logistic Regression 建立台積電隔日漲跌預測專案。
@@ -75,4 +77,3 @@ python -m stock_predictor.main --start 2015-01-01 --end 2026-06-02
 ```bash
 pytest
 ```
-

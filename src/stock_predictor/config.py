@@ -1,3 +1,4 @@
+# Central configuration values for ticker, dates, feature windows, and split size.
 from dataclasses import dataclass
 
 
@@ -10,4 +11,3 @@ class ProjectConfig:
     rsi_window: int = 14
     short_ma_window: int = 5
     long_ma_window: int = 20
-

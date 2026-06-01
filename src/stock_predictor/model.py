@@ -1,3 +1,4 @@
+# Train, split, and evaluate the logistic regression stock movement model.
 from __future__ import annotations
 
 import math
@@ -63,4 +64,3 @@ def evaluate_model(
         "accuracy": float(accuracy),
         "roc_auc": float(roc_auc),
     }
-

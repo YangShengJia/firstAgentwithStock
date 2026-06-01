@@ -1,3 +1,4 @@
+# Download and validate stock price data from Yahoo Finance.
 from __future__ import annotations
 
 from pathlib import Path

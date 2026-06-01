@@ -1,3 +1,4 @@
+# Ignore generated Python, virtual environment, cache, data, and report files.
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -8,4 +9,3 @@ venv/
 data/
 reports/
 .env
-

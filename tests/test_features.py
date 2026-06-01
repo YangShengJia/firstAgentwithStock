@@ -1,3 +1,4 @@
+# Unit tests for RSI calculation and feature generation.
 import pandas as pd
 
 from stock_predictor.features import build_features, calculate_rsi
@@ -27,4 +28,3 @@ def test_build_features_creates_expected_columns_and_target():
     assert list(result.columns) == ["Close", "Volume", "MA5", "MA20", "RSI", "target"]
     assert result["target"].isin([0, 1]).all()
     assert len(result) > 0
-

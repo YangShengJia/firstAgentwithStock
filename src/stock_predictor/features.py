@@ -1,3 +1,4 @@
+# Build moving average, RSI, and next-day movement target features.
 from __future__ import annotations
 
 import pandas as pd
@@ -32,4 +33,3 @@ def build_features(
 
     columns = ["Close", "Volume", "MA5", "MA20", "RSI", "target"]
     return featured[columns].dropna()
-

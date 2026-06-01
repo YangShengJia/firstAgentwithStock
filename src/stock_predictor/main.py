@@ -1,3 +1,4 @@
+# Command-line entry point that downloads data, trains the model, and saves metrics.
 from __future__ import annotations
 
 import argparse
@@ -66,4 +67,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
