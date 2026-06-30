@@ -18,10 +18,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--end", default=ProjectConfig.end_date, help="End date, YYYY-MM-DD.")
     parser.add_argument("--test-size", type=float, default=ProjectConfig.test_size)
     parser.add_argument("--metrics-path", default="reports/metrics.json")
+    parser.add_argument("--debug", action="store_true", help="Print debug information.")
     return parser.parse_args()
 
 
-def main() -> None:
+def main(debug: bool = False,) -> None:
     args = parse_args()
     config = ProjectConfig(
         ticker=args.ticker,
@@ -31,14 +32,18 @@ def main() -> None:
     )
 
     raw_data = download_stock_data(config.ticker, config.start_date, config.end_date)
+    if args.debug:
+        print("CCC raw_data.head():")
+        print(raw_data.head().to_string())
     dataset = build_features(
         raw_data,
         short_ma_window=config.short_ma_window,
         long_ma_window=config.long_ma_window,
         rsi_window=config.rsi_window,
+        debug=args.debug,
     )
 
-    x_train, x_test, y_train, y_test = split_time_series(dataset, test_size=config.test_size)
+    x_train, x_test, y_train, y_test = split_time_series(dataset, test_size=config.test_size, debug=args.debug,)
     model = train_model()
     model.fit(x_train, y_train)
 

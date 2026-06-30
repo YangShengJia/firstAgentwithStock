@@ -16,22 +16,27 @@ FEATURE_COLUMNS = ["Close", "Volume", "MA5", "MA20", "RSI"]
 def split_time_series(
     df: pd.DataFrame,
     test_size: float = 0.2,
+    debug: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     """Split ordered stock data into train and test sets without shuffling."""
     if not 0 < test_size < 1:
         raise ValueError("test_size must be between 0 and 1.")
-
     split_index = int(len(df) * (1 - test_size))
     if split_index <= 0 or split_index >= len(df):
         raise ValueError("Not enough rows to create train and test sets.")
-
     train = df.iloc[:split_index]
     test = df.iloc[split_index:]
-
     x_train = train[FEATURE_COLUMNS]
     y_train = train["target"]
     x_test = test[FEATURE_COLUMNS]
     y_test = test["target"]
+    if debug:
+        print(f"pd.DataFrame Total rows: {len(df)}")
+        print(f"Split index: {split_index}")
+        print(f"Train rows: {len(train)}")
+        print(f"Test rows: {len(test)}")
+        print(f"First train row:\n{train.iloc[[0]]}")
+        print(f"First test row:\n{test.iloc[[0]]}")
     return x_train, x_test, y_train, y_test
 
 

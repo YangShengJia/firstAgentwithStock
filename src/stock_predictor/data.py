@@ -7,12 +7,11 @@ import pandas as pd
 import yfinance as yf
 
 
-def download_stock_data(ticker: str, start: str, end: str | None = None) -> pd.DataFrame:
+def download_stock_data(ticker: str, start: str, end: str | None = None,debug: bool = False,) -> pd.DataFrame:
     """Download OHLCV data from Yahoo Finance."""
     cache_dir = Path("data/cache")
     cache_dir.mkdir(parents=True, exist_ok=True)
     yf.set_tz_cache_location(str(cache_dir))
-
     df = yf.download(
         tickers=ticker,
         start=start,
@@ -20,7 +19,6 @@ def download_stock_data(ticker: str, start: str, end: str | None = None) -> pd.D
         auto_adjust=False,
         progress=False,
     )
-
     if df.empty:
         raise ValueError(f"No data downloaded for ticker={ticker!r}.")
 
@@ -35,4 +33,7 @@ def download_stock_data(ticker: str, start: str, end: str | None = None) -> pd.D
 
     df = df.sort_index()
     df.index.name = "Date"
+    if debug:
+        print("BBB df.head():")
+        print(df.head().to_string())
     return df
