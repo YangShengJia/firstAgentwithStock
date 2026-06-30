@@ -1,5 +1,7 @@
 # Ignore generated Python, virtual environment, cache, data, and report files.
 .DS_Store
+.vscode/
+*.egg-info/
 __pycache__/
 *.py[cod]
 .pytest_cache/
