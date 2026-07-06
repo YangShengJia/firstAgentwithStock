@@ -39,7 +39,15 @@ def build_features(
     featured["MA5"] = featured["Close"].rolling(window=short_ma_window).mean()
     featured["MA20"] = featured["Close"].rolling(window=long_ma_window).mean()
     featured["RSI"] = calculate_rsi(featured["Close"], window=rsi_window, debug=debug)
-    featured["target"] = (featured["Close"].shift(-1) > featured["Close"]).astype(int)
+    # Build next-day close first so rows without future prices can be excluded.
+    featured["next_close"] = featured["Close"].shift(-1)
+
+    # Drop rows that cannot be labeled, usually the final row.
+    featured = featured.dropna(subset=["next_close"])
+
+    # Target: 1 if the next close is higher than today's close, otherwise 0.
+    featured["target"] = (featured["next_close"] > featured["Close"]).astype(int)
+
 
     columns = ["Close", "Volume", "MA5", "MA20", "RSI", "target"]
     return featured[columns].dropna()
