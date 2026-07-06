@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import matplotlib.pyplot as plt
+
 from pathlib import Path
 
 from stock_predictor.config import ProjectConfig
@@ -19,10 +21,57 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--test-size", type=float, default=ProjectConfig.test_size)
     parser.add_argument("--metrics-path", default="reports/metrics.json")
     parser.add_argument("--debug", action="store_true", help="Print debug information.")
+
+    parser.add_argument("--debug-table", 
+                        choices=["features"], 
+                        default=None, 
+                        help="Choose which debug table to print.", )
+    parser.add_argument("--ma5", action="store_true", help="Show MA5 column.")
+    parser.add_argument("--ma20", action="store_true", help="Show MA20 column.")
+    parser.add_argument("--rsi", action="store_true", help="Show RSI column.")
+    parser.add_argument("--debug-rows", 
+                        type=int, 
+                        default=100, 
+                        help="Number of rows to show in debug plot.", )
+
     return parser.parse_args()
 
+def get_debug_feature_columns(args) -> list[str]:
+    columns = ["Close"]
 
-def main(debug: bool = False,) -> None:
+    if args.ma5:
+        columns.append("MA5")
+
+    if args.ma20:
+        columns.append("MA20")
+
+    if args.rsi:
+        columns.append("RSI")
+
+    # 如果都沒指定，就預設全顯示
+    if columns == ["Close"]:
+        columns = ["Close", "MA5", "MA20", "RSI"]
+
+    return columns
+
+def plot_feature_debug(dataset, columns: list[str], rows: int = 100) -> None:
+    plot_data = dataset[columns].head(rows)
+
+    plt.figure(figsize=(12, 6))
+
+    for column in columns:
+        plt.plot(plot_data.index, plot_data[column], label=column)
+
+    plt.xlabel("Date")
+    plt.ylabel("Value")
+    plt.title("Feature Debug Plot")
+    plt.legend()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+
+def main() -> None:
     args = parse_args()
     config = ProjectConfig(
         ticker=args.ticker,
@@ -42,6 +91,10 @@ def main(debug: bool = False,) -> None:
         rsi_window=config.rsi_window,
         debug=args.debug,
     )
+
+    if args.debug and args.debug_table == "features":
+        selected_columns = get_debug_feature_columns(args)
+        plot_feature_debug(dataset, selected_columns, rows=args.debug_rows)
 
     x_train, x_test, y_train, y_test = split_time_series(dataset, test_size=config.test_size, debug=args.debug,)
     model = train_model()
