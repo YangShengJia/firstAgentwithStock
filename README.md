@@ -79,6 +79,22 @@ metrics path: reports/metrics.json
 
 同時會將結果寫入 `reports/metrics.json`。
 
+## 執行範例結果
+
+```bash
+python -m stock_predictor.main --ticker 2434.TW --start 2015-01-01
+```
+
+範例輸出：
+
+```text
+Ticker: 2434.TW
+Train rows: 2221
+Test rows: 556
+Accuracy: 0.5144
+ROC-AUC: 0.5149
+```
+
 ## CLI 參數
 
 | 參數 | 型別 / 用法 | 預設值 | 用途 |
