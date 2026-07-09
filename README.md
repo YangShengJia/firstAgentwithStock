@@ -238,6 +238,11 @@ python -m pip install matplotlib
 
 如果 VS Code 顯示無法解析 `matplotlib.pyplot`，也要確認 VS Code 選到正確的 Python interpreter。
 
+## 免責聲明
+
+本專案僅作為機器學習與資料分析練習用途，並非投資建議、交易建議或金融商品推薦。
+專案中的模型評估結果不代表未來獲利能力，也未包含完整交易系統、資金控管、手續費、滑價或風險管理設計。
+
 ## 測試
 
 ```bash
