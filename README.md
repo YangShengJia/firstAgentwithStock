@@ -243,6 +243,21 @@ python -m pip install matplotlib
 本專案僅作為機器學習與資料分析練習用途，並非投資建議、交易建議或金融商品推薦。
 專案中的模型評估結果不代表未來獲利能力，也未包含完整交易系統、資金控管、手續費、滑價或風險管理設計。
 
+## 作品集與使用限制
+
+This repository is published for portfolio review and educational reference only.
+Some parts of the project were developed with the assistance of AI coding tools under my direction, review, and modification.
+
+You may read the code for learning and reference, but you may not submit this project,
+in whole or in part, as your own homework, coursework, thesis, job application project,
+or portfolio work.
+
+本專案公開目的為作品集展示與學習交流。部分內容是在本人指令、審查與修改下，
+搭配 AI coding 工具輔助完成。
+
+歡迎參考程式結構與實作方式，但不得將本專案全部或部分內容作為自己的作業、
+課程專題、論文、求職作品或作品集提交。
+
 ## 測試
 
 ```bash
