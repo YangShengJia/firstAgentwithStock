@@ -120,6 +120,10 @@ def main() -> None:
     print(f"Test rows: {metrics['test_rows']}")
     print(f"Accuracy: {metrics['accuracy']:.4f}")
     print(f"ROC-AUC: {metrics['roc_auc']:.4f}")
+    print(f"Positive-Rate: {metrics['positive_rate']:.4f}")
+    print(f"Negative-Rate: {metrics['negative_rate']:.4f}")
+    print(f"Always-Up-Accuracy: {metrics['always_up_accuracy']:.4f}")
+    print(f"Majority-Baseline-Accuracy: {metrics['majority_baseline_accuracy']:.4f}")
     print(f"Metrics saved to: {metrics_path}")
 
 

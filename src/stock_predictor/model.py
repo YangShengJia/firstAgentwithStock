@@ -59,7 +59,12 @@ def evaluate_model(
     predictions = model.predict(x_test)
     probabilities = model.predict_proba(x_test)[:, 1]
 
+    positive_rate = float(y_test.mean())
+    negative_rate = float(1 - positive_rate)
+
     accuracy = accuracy_score(y_test, predictions)
+    always_up_accuracy = y_test.mean()
+    majority_baseline_accuracy = max(y_test.mean(), 1 - y_test.mean())
     if y_test.nunique() < 2:
         roc_auc = math.nan
     else:
@@ -68,4 +73,8 @@ def evaluate_model(
     return {
         "accuracy": float(accuracy),
         "roc_auc": float(roc_auc),
+        "positive_rate": positive_rate,
+        "negative_rate": negative_rate,
+        "always_up_accuracy": float(always_up_accuracy),
+        "majority_baseline_accuracy": float(majority_baseline_accuracy),
     }
