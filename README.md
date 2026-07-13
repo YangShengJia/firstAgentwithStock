@@ -109,6 +109,24 @@ ROC-AUC: 0.5149
 
 這組結果只代表此 ticker、日期範圍、特徵與模型設定下的回測結果，不代表未來投資績效。
 
+## 2409.TW 三種模型比較
+
+以下範例使用同一個 ticker，比較 `logistic`、`random-forest`、`gradient-boosting` 三種模型的評估結果。
+
+```bash
+python -m stock_predictor.main --ticker 2409.TW --model logistic
+python -m stock_predictor.main --ticker 2409.TW --model random-forest
+python -m stock_predictor.main --ticker 2409.TW --model gradient-boosting
+```
+
+| Model | Train rows | Test rows | Accuracy | ROC-AUC | Positive-Rate | Negative-Rate | Always-Up-Accuracy | Majority-Baseline-Accuracy |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `logistic` | 1248 | 313 | 0.5367 | 0.5194 | 0.4728 | 0.5272 | 0.4728 | 0.5272 |
+| `random-forest` | 1248 | 313 | 0.5144 | 0.5188 | 0.4728 | 0.5272 | 0.4728 | 0.5272 |
+| `gradient-boosting` | 1248 | 313 | 0.4760 | 0.4742 | 0.4728 | 0.5272 | 0.4728 | 0.5272 |
+
+在這組 2409.TW 的執行結果中，`logistic` 的 Accuracy 最高，但三種模型的表現都接近 baseline，代表這組結果仍然只能作為模型比較練習，不代表可直接用於交易決策。
+
 ## CLI 參數
 
 | 參數 | 型別 / 用法 | 預設值 | 用途 |
