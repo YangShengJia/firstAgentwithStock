@@ -2,14 +2,14 @@
 
 # firstAgentwithStock
 
-使用 Python、yfinance 與 Logistic Regression 建立台積電隔日漲跌預測專案。
+使用 Python、yfinance 與分類模型建立台積電隔日漲跌預測專案。
 
 ## 功能
 
 - 使用 `yfinance` 下載台積電股價資料，預設 ticker 為 `2330.TW`
 - 建立技術指標特徵：`MA5`、`MA20`、`RSI`
 - 預測隔日收盤價相較今日是上漲或下跌
-- 使用 `LogisticRegression` 訓練分類模型
+- 可選擇 `LogisticRegression`、`RandomForestClassifier` 或 `GradientBoostingClassifier` 訓練分類模型
 - 輸出 `Accuracy` 與 `ROC-AUC`
 - 支援 `--debug` 檢視資料流程，並可用 `matplotlib` 顯示 `Close`、`MA5`、`MA20`、`RSI` 圖形
 - 專案結構清楚，方便後續擴充
@@ -68,10 +68,12 @@ ticker: 2330.TW
 start date: 2020-01-01
 test size: 0.2
 metrics path: reports/metrics.json
+model: logistic
 ```
 
 執行後會在終端機輸出：
 
+- 使用的 model
 - Accuracy
 - ROC-AUC
 - 訓練資料筆數
@@ -89,6 +91,7 @@ python -m stock_predictor.main --ticker 2434.TW --start 2015-01-01
 
 ```text
 Ticker: 2434.TW
+Model: logistic
 Train rows: 2221
 Test rows: 556
 Accuracy: 0.5144
@@ -98,6 +101,7 @@ ROC-AUC: 0.5149
 輸出解釋：
 
 - `Ticker: 2434.TW`：這次執行使用的 Yahoo Finance 股票代號。
+- `Model: logistic`：這次執行使用的模型；預設為 `logistic`。
 - `Train rows: 2221`：用來訓練模型的資料筆數。時間序列切分會使用前段資料作為訓練集。
 - `Test rows: 556`：用來評估模型的資料筆數。時間序列切分會使用後段資料作為測試集。
 - `Accuracy: 0.5144`：模型預測隔日漲跌方向的正確率，約等於 51.44%。
@@ -114,6 +118,7 @@ ROC-AUC: 0.5149
 | `--end` | 日期，例如 `2026-06-02` | `None` | 指定下載資料結束日期；不填則抓到可取得的最新資料 |
 | `--test-size` | 小數，例如 `0.2` | `0.2` | 指定測試集比例；`0.2` 代表後 20% 當 test |
 | `--metrics-path` | 路徑，例如 `reports/metrics.json` | `reports/metrics.json` | 指定評估結果輸出位置 |
+| `--model` | `logistic`、`random-forest`、`gradient-boosting` | `logistic` | 指定要訓練的分類模型 |
 | `--debug` | 開關，不需要給值 | `False` | 開啟 debug 模式 |
 | `--debug-table` | 目前支援 `features` | `None` | 指定是否顯示 features debug 圖 |
 | `--ma5` | 開關，不需要給值 | `False` | 在 features debug 圖中顯示 `MA5` |
@@ -136,6 +141,14 @@ python -m stock_predictor.main --test-size 0.2
 ```
 
 `test-size = 0.2` 代表前 80% 當訓練集，後 20% 當測試集。因為是時間序列資料，所以不進行 random shuffle。
+
+指定模型：
+
+```bash
+python -m stock_predictor.main --model logistic
+python -m stock_predictor.main --model random-forest
+python -m stock_predictor.main --model gradient-boosting
+```
 
 ## Debug 與資料視覺化
 

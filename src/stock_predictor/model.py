@@ -4,6 +4,7 @@ from __future__ import annotations
 import math
 
 import pandas as pd
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_auc_score
 from sklearn.pipeline import Pipeline
@@ -11,6 +12,7 @@ from sklearn.preprocessing import StandardScaler
 
 
 FEATURE_COLUMNS = ["Close", "Volume", "MA5", "MA20", "RSI"]
+MODEL_CHOICES = ("logistic", "random-forest", "gradient-boosting")
 
 
 def split_time_series(
@@ -40,18 +42,26 @@ def split_time_series(
     return x_train, x_test, y_train, y_test
 
 
-def train_model() -> Pipeline:
-    """Create a logistic regression pipeline."""
-    return Pipeline(
-        steps=[
-            ("scaler", StandardScaler()),
-            ("classifier", LogisticRegression(max_iter=1000, random_state=42)),
-        ]
-    )
+def train_model(model_name: str = "logistic"):
+    """Create a classifier by model name."""
+    if model_name == "logistic":
+        return Pipeline(
+            steps=[
+                ("scaler", StandardScaler()),
+                ("classifier", LogisticRegression(max_iter=1000, random_state=42)),
+            ]
+        )
+    if model_name == "random-forest":
+        return RandomForestClassifier(random_state=42)
+    if model_name == "gradient-boosting":
+        return GradientBoostingClassifier(random_state=42)
+
+    supported_models = ", ".join(MODEL_CHOICES)
+    raise ValueError(f"Unsupported model_name: {model_name}. Choose one of: {supported_models}.")
 
 
 def evaluate_model(
-    model: Pipeline,
+    model,
     x_test: pd.DataFrame,
     y_test: pd.Series,
 ) -> dict[str, float]:

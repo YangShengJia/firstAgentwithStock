@@ -10,7 +10,7 @@ from pathlib import Path
 from stock_predictor.config import ProjectConfig
 from stock_predictor.data import download_stock_data
 from stock_predictor.features import build_features
-from stock_predictor.model import evaluate_model, split_time_series, train_model
+from stock_predictor.model import MODEL_CHOICES, evaluate_model, split_time_series, train_model
 
 
 def parse_args() -> argparse.Namespace:
@@ -20,6 +20,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--end", default=ProjectConfig.end_date, help="End date, YYYY-MM-DD.")
     parser.add_argument("--test-size", type=float, default=ProjectConfig.test_size)
     parser.add_argument("--metrics-path", default="reports/metrics.json")
+    parser.add_argument(
+        "--model",
+        choices=MODEL_CHOICES,
+        default="logistic",
+        help="Choose model: logistic, random-forest, or gradient-boosting.",
+    )
     parser.add_argument("--debug", action="store_true", help="Print debug information.")
 
     parser.add_argument("--debug-table", 
@@ -97,13 +103,14 @@ def main() -> None:
         plot_feature_debug(dataset, selected_columns, rows=args.debug_rows)
 
     x_train, x_test, y_train, y_test = split_time_series(dataset, test_size=config.test_size, debug=args.debug,)
-    model = train_model()
+    model = train_model(args.model)
     model.fit(x_train, y_train)
 
     metrics = evaluate_model(model, x_test, y_test)
     metrics.update(
         {
             "ticker": config.ticker,
+            "model_name": args.model,
             "start_date": config.start_date,
             "end_date": config.end_date,
             "train_rows": int(len(x_train)),
@@ -116,6 +123,7 @@ def main() -> None:
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
     print(f"Ticker: {metrics['ticker']}")
+    print(f"Model: {metrics['model_name']}")
     print(f"Train rows: {metrics['train_rows']}")
     print(f"Test rows: {metrics['test_rows']}")
     print(f"Accuracy: {metrics['accuracy']:.4f}")
