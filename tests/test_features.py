@@ -28,3 +28,19 @@ def test_build_features_creates_expected_columns_and_target():
     assert list(result.columns) == ["Close", "Volume", "MA5", "MA20", "RSI", "target"]
     assert result["target"].isin([0, 1]).all()
     assert len(result) > 0
+
+
+def test_build_features_drops_row_without_next_close():
+    df = pd.DataFrame(
+        {
+            "Open": range(1, 31),
+            "High": range(2, 32),
+            "Low": range(0, 30),
+            "Close": range(1, 31),
+            "Volume": [1000] * 30,
+        }
+    )
+
+    result = build_features(df)
+
+    assert df["Close"].iloc[-1] not in result["Close"].to_list()
